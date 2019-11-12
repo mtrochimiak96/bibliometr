@@ -35,8 +35,93 @@
 <div class="jumbotron">
   
 <div class="container">
-  <h2>Wyszukiwarka artykułów</h2>
+ <h2>Wyszukiwarka artykułów</h2>
 
+<div class="col-md-8 order-md-1">
+      <form action="wynik.php" class="needs-validation" novalidate>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">Tytuł</label>
+            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+           
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="lastName">Imię autora</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+           
+          </div>
+		  
+		  
+		   <div class="col-md-6 mb-3">
+            <label for="lastName">Nazwisko autora</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+          </div>
+		  
+		  
+		   <div class="col-md-6 mb-3">
+            <label for="lastName">Data od</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+          </div>
+		  
+		    
+		   <div class="col-md-6 mb-3">
+            <label for="lastName">Data do</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+          </div>
+		  
+		  		<div class="col-md-6 mb-3">
+            <label for="sel1">Sortuj:</label>
+  <select class="form-control" id="sel1">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+  </select>
+          </div>
+		  
+
+       
+          </div>
+		  <legend>Wybierz kolumne</legend>
+		  <div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="">Option 1
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="">Option 2
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="" disabled>Option 3
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="" disabled>Option 3
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="" disabled>Option 3
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label">
+    <input type="checkbox" class="form-check-input" value="" disabled>Option 3
+  </label>
+</div>
+<button type="button" class="btn btn-success">Szukaj</button>
+
+        </div>
+
+      
+	
+  </div>
+  
+  </form>
  
   
 </div></div>
