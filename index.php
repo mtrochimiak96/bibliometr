@@ -9,6 +9,11 @@
 	<script src="js/bootstrap.min.js"></script>
 </head>
 <body>
+		<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
 	
 <nav class="navbar navbar-expand-sm bg-light navbar-light">
 	<div class="container-fluid">
