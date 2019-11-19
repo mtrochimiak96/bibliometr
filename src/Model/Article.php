@@ -9,13 +9,13 @@ class Article
     /** @var int */
     private $id_article;
 
-	/** @var DateTime */
+    /** @var string */
     private $author;
 
     /** @var string */
     private $title;
 
-    /** @var int */
+    /** @var string */
     private $doi;
 
     /** @var int */
@@ -23,10 +23,10 @@ class Article
 
     /** @var string */
     private $conference;
-	
-		/** @var DateTime */
+
+    /** @var DateTime */
     private $publicdate;
-	
+
 
 
     /**
@@ -38,7 +38,7 @@ class Article
     }
 
     /**
-     * @param int $id
+     * @param int $id_article
      * @return Article
      */
     public function setId($id_article)
@@ -46,14 +46,14 @@ class Article
         $this->id_article = $id_article;
         return $this;
     }
-    
+
     public function getAuthor()
     {
         return $this->author;
     }
 
     /**
-     * @param string $publication_date
+     * @param string $author
      * @return Article
      */
     public function setAuthor($author)
@@ -89,7 +89,7 @@ class Article
     }
 
     /**
-     * @param string $DOI
+     * @param string $doi
      * @return Article
      */
     public function setDoi($doi)
@@ -107,7 +107,7 @@ class Article
     }
 
     /**
-     * @param int $points
+     * @param int $minipoint
      * @return Article
      */
     public function setMinipoint($minipoint)
@@ -120,7 +120,7 @@ class Article
      * @return string
      */
 
-	 public function getConference()
+    public function getConference()
     {
         return $this->conference;
     }
@@ -134,8 +134,8 @@ class Article
         $this->conference = $conference;
         return $this;
     }
-	
-	    public function getPublicdate()
+
+    public function getPublicdate()
     {
         return $this->publicdate;
     }
@@ -149,53 +149,67 @@ class Article
         $this->publicdate = $publicdate;
         return $this;
     }
-	
+
 
 
     /**
+     * @param string $where
      * @return Article[]
      */
-    public static function fetchAll()
+    public static function fetchAll($where = null, $order = null)
     {
         $dbh = self::getConnection();
 
         $articles = [];
-        foreach($dbh->query('SELECT * from article') as $row) {
-            $article = new article();
-            $article
-                ->setId($row['id_article'])
-                ->setAuthor($row['author'])
-                ->setTitle($row['title'])
-                ->setDoi($row['doi'])
-                ->setMinipoint($row['minipoint'])
-                ->setConference($row['conference'])
-				->setPublicdate($row['publicdate'])
-				
-            ;
-            $articles[] = $article;
+        $where = $where ? " WHERE " . $where : "";
+        $order = $order ? " ORDER BY " . $order : "";
+        $qry = $dbh->query("SELECT * from article" . $where . $order);
+        if ($qry) {
+            foreach ($qry as $row) {
+                $article = new Article();
+                $article
+                    ->setId($row['id_article'])
+                    ->setAuthor($row['author'])
+                    ->setTitle($row['title'])
+                    ->setDoi($row['doi'])
+                    ->setMinipoint($row['minipoint'])
+                    ->setConference($row['conference'])
+                    ->setPublicdate($row['publicdate']);
+                $articles[] = $article;
+            }
         }
         $dbh = null;
 
         return $articles;
     }
 
-   
+
     public function save()
     {
         // polacz z baza danych
         $dbh = self::getConnection();
 
         // sprawdz czy jest ID
-        if (! $this->getId()) {
+        if (!$this->getId()) {
             // insert nowy jesli nie ma ID
-            $sql = "INSERT INTO article(author, title, doi, minipoint, conference, publicdate ) VALUES ('{$this->getAuthor()}', '{$this->getTitle()}', '{$this->getDoi()}', '{$this->getMinipoint()}', '{$this->getConference()}', '{$this->getPublicdate()}' )";
+            $sql = "INSERT INTO `article` (`author`, `title`, `doi`, `minipoint`, `conference`, `publicdate` ) VALUES ('{$this->getAuthor()}', '{$this->getTitle()}', '{$this->getDoi()}', '{$this->getMinipoint()}', '{$this->getConference()}', '{$this->getPublicdate()}' )";
             $dbh->query($sql);
         } else {
             // update istniejacego jesli jest ID
-            $sql ="UPDATE aricle SET author='{$this->getAuthor()}', title='{$this->getTitle()}', doi='{$this->getDoi()}', minipoint='{$this->getMinipoint()}', conference='{$this->getConference()}' , publicdate='{$this->getPublicdate()}'  WHERE id_article={$this->getId()}";
-
+            $sql = "UPDATE `article` SET author='{$this->getAuthor()}', title='{$this->getTitle()}', doi='{$this->getDoi()}', minipoint='{$this->getMinipoint()}', conference='{$this->getConference()}' , publicdate='{$this->getPublicdate()}' WHERE id_article='{$this->getId()}'";
+            $dbh->query($sql);
         }
-    
+    }
+
+    public function delete()
+    {
+        $dbh = self::getConnection();
+
+        if ($this->getId()) {
+            $sql = "DELETE FROM `article` WHERE id_article = '{$this->getId()}'";
+            return !!$dbh->query($sql);
+        }
+        return false;
     }
 
     public static function getConnection()
@@ -211,6 +225,4 @@ class Article
 
         return $dbh;
     }
-    
 }
-?>
