@@ -25,7 +25,7 @@ class ArticleController
     {
         
         if  (isset($_REQUEST['author'])) {
-            // walidacja danych
+            // walidacjadanych
           if (
             ! (
                 isset($_REQUEST['author']) && ! empty($_REQUEST['author'])
