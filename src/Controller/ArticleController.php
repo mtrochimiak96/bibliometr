@@ -5,7 +5,6 @@ require_once __DIR__ . '/../Model/Article.php';
 
 use src\Model\Article;
 
-
 class ArticleController
 {
     public static function testAction()
