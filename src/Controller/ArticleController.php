@@ -4,7 +4,6 @@ namespace src\Controller;
 require_once __DIR__ . '/../Model/Article.php';
 
 use src\Model\Article;
-
 class ArticleController
 {
     public static function testAction()
@@ -24,7 +23,7 @@ class ArticleController
     public static function createAction()
     {
         
-        if  (isset($_REQUEST['author'])) {
+    if  (isset($_REQUEST['author'])) {
             // walidacjadanych
           if (
             ! (
@@ -34,8 +33,7 @@ class ArticleController
                 && isset($_REQUEST['minipoint']) && ! empty($_REQUEST['minipoint'])
 				&& isset($_REQUEST['conference']) && ! empty($_REQUEST['conference'])
 				&& isset($_REQUEST['publicdate']) && ! empty($_REQUEST['publicdate'])
-				
-            ) 
+				           ) 
             ) {
                 die("Nieprawidlowe dane");
             }
