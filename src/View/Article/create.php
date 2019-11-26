@@ -9,7 +9,7 @@
             <div class="form-group row">
                 <label for="author" class="col-sm-2 col-form-label">Autor</label>
                 <div class="col-sm-10">
-                    <input type="text" step="1" class="form-control" id="author" name="author" placeholder="Autor">
+                    <input type="text" step="1" class="form-control" id="author" name="author" value="<?= $_SESSION['name'] ?>">
                 </div>
             </div>
 
@@ -26,15 +26,30 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="shares" class="col-sm-2 col-form-label">Współautorzy</label>
+                <div class="col-sm-10">
+                    <input type="text" step="1" class="form-control" id="shares" name="shares" placeholder="Udziały">
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="minipoint" class="col-sm-2 col-form-label">Punkty</label>
                 <div class="col-sm-10">
                     <input type="number" class="form-control" id="minipoint" name="minipoint" placeholder="Punkty">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="conference" class="col-sm-2 col-form-label">Konferencja</label>
                 <div class="col-sm-10">
-                    <input type="text" step="1" class="form-control" id="conference" name="conference" placeholder="Konferencja">
+                    <label class="form-check-label col-sm-2 col-form-label" for="conference">Konferencja</label>
+                    <input class="form-check-input" type="radio" name="conftype" value="conference" id="conference" checked>
+                </div>
+                <div class="col-sm-10">
+                    <label class="form-check-label col-sm-2 col-form-label" for="magazine">Czasopismo</label>
+                    <input class="form-check-input" type="radio" name="conftype" value="magazine" id="magazine">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input type="text" step="1" class="form-control" id="confvalue" name="confvalue">
                 </div>
             </div>
             <div class="form-group row">
@@ -47,7 +62,7 @@
 
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                        <button type="submit" class="btn btn-success">Zapisz</button>
                     </div>
                 </div>
         </form>

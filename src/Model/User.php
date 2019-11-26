@@ -16,13 +16,13 @@ class User
     private $name;
 
     /** @var string */
-    private $surname;
-
-    /** @var string */
     private $password;
 
     /** @var string */
     private $affiliation;
+
+    /** @var string */
+    private $role;
 
     /**
      * @return int
@@ -81,26 +81,10 @@ class User
     /**
      * @return string
      */
-    public function getSurname()
-    {
-        return $this->surname;
-    }
 
-    /**
-     * @param string $surname
-     * @return User
-     */
-    public function setSurname($surname)
-    {
-        $this->surname = $surname;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getPassword()
     {
+
         return $this->password;
     }
 
@@ -132,35 +116,76 @@ class User
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param string $role
+     * @return User
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+        return $this;
+    }
+
 
 
 
     /**
+     * @param string $where
+     * @param string $order
      * @return User[]
      */
-    public static function fetchAll()
+    public static function fetchAll($where = null, $order = null)
     {
         $dbh = self::getConnection();
 
         $users = [];
-        foreach ($dbh->query('SELECT * from users') as $row) {
-            $user = new User();
-            $user
-                ->setId($row['id_user'])
-                ->setEmail($row['email'])
-                ->setName($row['name'])
-                ->setSurname($row['surname'])
-                ->setPassword($row['password'])
-                ->setAffiliation($row['affiliation']);
-            $users[] = $user;
+        $where = $where ? " WHERE " . $where : "";
+        $order = $order ? " ORDER BY " . $order : "";
+        $qry = $dbh->query("SELECT * from users" . $where . $order);
+        if ($qry) {
+            foreach ($qry as $row) {
+                $user = new User();
+                $user
+                    ->setId($row['id_user'])
+                    ->setEmail($row['email'])
+                    ->setName($row['name'])
+                    ->setPassword($row['password'])
+                    ->setRole($row['role'])
+                    ->setAffiliation($row['affiliation']);
+                $users[] = $user;
+            }
         }
         $dbh = null;
+
 
         return $users;
     }
 
+    public static function userExists($name, $role)
+    {
+        $dbh = self::getConnection();
 
-    public function save()
+        $ex = false;
+        $qry = $dbh->query("SELECT * from `users` WHERE name = '{$name}' AND role = '{$role}'")->fetch(\PDO::FETCH_OBJ);
+        if ($qry) {
+            $ex = true;
+        }
+        $dbh = null;
+
+
+        return $ex;
+    }
+
+
+    public function saveUser()
     {
         // polacz z baza danych
         $dbh = self::getConnection();
@@ -168,11 +193,28 @@ class User
         // sprawdz czy jest ID
         if (!$this->getId()) {
             // insert nowy jesli nie ma ID
-            $sql = "INSERT INTO `article` (`email`, `name`, `surname`, `password`, `affiliation`) VALUES ('{$this->getEmail()}', '{$this->getName()}', '{$this->getSurname()}', '{$this->getPassword()}', '{$this->getAffiliation()}')";
-            $dbh->query($sql);
+            $sql = "INSERT INTO `users` (`email`, `name`, `password`, `affiliation`) VALUES ('{$this->getEmail()}', '{$this->getName()}', '{$this->getPassword()}', '{$this->getAffiliation()}')";
+            $qry = $dbh->query($sql);
+            return !!$qry;
         } else {
             // update istniejacego jesli jest ID
-            $sql = "UPDATE `users` SET email='{$this->getEmail()}', name='{$this->getName()}', surname='{$this->getSurname()}', password='{$this->getPassword()}', affiliation='{$this->getAffiliation()}'  WHERE id_user='{$this->getId()}'";
+            $sql = "UPDATE `users` SET email='{$this->getEmail()}', name='{$this->getName()}', password='{$this->getPassword()}', affiliation='{$this->getAffiliation()}', role='{$this->getRole()}' WHERE id_user='{$this->getId()}'";
+            $qry = $dbh->query($sql);
+            return !!$qry;
+        }
+    }
+
+    public function delete()
+    {
+        // polacz z baza danych
+        $dbh = self::getConnection();
+
+        // sprawdz czy jest ID
+        if ($this->getId()) {
+            // insert nowy jesli nie ma ID
+            $sql = "DELETE FROM `users` WHERE id_user = '{$this->getId()}'";
+            $qry = $dbh->query($sql);
+            return !!$qry;
         }
     }
 

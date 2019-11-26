@@ -18,11 +18,17 @@ class Article
     /** @var string */
     private $doi;
 
+    /** @var string */
+    private $shares;
+
     /** @var int */
     private $minipoint;
 
     /** @var string */
-    private $conference;
+    private $conferenceType;
+
+    /** @var string */
+    private $conferenceValue;
 
     /** @var DateTime */
     private $publicdate;
@@ -99,6 +105,24 @@ class Article
     }
 
     /**
+     * @return string
+     */
+    public function getShares()
+    {
+        return $this->shares;
+    }
+
+    /**
+     * @param string $shares
+     * @return Article
+     */
+    public function setShares($shares)
+    {
+        $this->shares = $shares;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getMinipoint()
@@ -120,18 +144,37 @@ class Article
      * @return string
      */
 
-    public function getConference()
+    public function getConferenceType()
     {
-        return $this->conference;
+        return $this->conferenceType;
     }
 
     /**
-     * @param string $conference
+     * @param string $conferenceType
      * @return Article
      */
-    public function setConference($conference)
+    public function setConferenceType($conferenceType)
     {
-        $this->conference = $conference;
+        $this->conferenceType = $conferenceType;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+
+    public function getConferenceValue()
+    {
+        return $this->conferenceValue;
+    }
+
+    /**
+     * @param string $conferenceValue
+     * @return Article
+     */
+    public function setConferenceValue($conferenceValue)
+    {
+        $this->conferenceValue = $conferenceValue;
         return $this;
     }
 
@@ -154,6 +197,7 @@ class Article
 
     /**
      * @param string $where
+     * @param string $order
      * @return Article[]
      */
     public static function fetchAll($where = null, $order = null)
@@ -172,8 +216,10 @@ class Article
                     ->setAuthor($row['author'])
                     ->setTitle($row['title'])
                     ->setDoi($row['doi'])
+                    ->setShares($row['shares'])
                     ->setMinipoint($row['minipoint'])
-                    ->setConference($row['conference'])
+                    ->setConferenceType($row['conftype'])
+                    ->setConferenceValue($row['confvalue'])
                     ->setPublicdate($row['publicdate']);
                 $articles[] = $article;
             }
@@ -192,12 +238,15 @@ class Article
         // sprawdz czy jest ID
         if (!$this->getId()) {
             // insert nowy jesli nie ma ID
-            $sql = "INSERT INTO `article` (`author`, `title`, `doi`, `minipoint`, `conference`, `publicdate` ) VALUES ('{$this->getAuthor()}', '{$this->getTitle()}', '{$this->getDoi()}', '{$this->getMinipoint()}', '{$this->getConference()}', '{$this->getPublicdate()}' )";
-            $dbh->query($sql);
+            $sql = "INSERT INTO `article` (`author`, `title`, `doi`, `shares`, `minipoint`, `conftype`, `confvalue`, `publicdate` ) VALUES ('{$this->getAuthor()}', '{$this->getTitle()}', '{$this->getDoi()}', '{$this->getShares()}', '{$this->getMinipoint()}', '{$this->getConferenceType()}', '{$this->getConferenceValue()}', '{$this->getPublicdate()}' )";
+            $req = $dbh->query($sql);
+            $this->setId($dbh->lastInsertId());
+            return !!$req;
         } else {
             // update istniejacego jesli jest ID
-            $sql = "UPDATE `article` SET author='{$this->getAuthor()}', title='{$this->getTitle()}', doi='{$this->getDoi()}', minipoint='{$this->getMinipoint()}', conference='{$this->getConference()}' , publicdate='{$this->getPublicdate()}' WHERE id_article='{$this->getId()}'";
-            $dbh->query($sql);
+            $sql = "UPDATE `article` SET author='{$this->getAuthor()}', title='{$this->getTitle()}', doi='{$this->getDoi()}', shares='{$this->getShares()}', minipoint='{$this->getMinipoint()}', conftype='{$this->getConferenceType()}' , confvalue='{$this->getConferenceValue()}' , publicdate='{$this->getPublicdate()}' WHERE id_article='{$this->getId()}'";
+            $req = $dbh->query($sql);
+            return !!$req;
         }
     }
 
