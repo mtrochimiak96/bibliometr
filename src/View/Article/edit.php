@@ -27,15 +27,30 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="shares" class="col-sm-2 col-form-label">Współautorzy</label>
+                <div class="col-sm-10">
+                    <input type="text" step="1" class="form-control" id="shares" name="shares" placeholder="Udziały" value="<?= $article->getShares() ?>">
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="minipoint" class="col-sm-2 col-form-label">Punkty</label>
                 <div class="col-sm-10">
                     <input type="number" class="form-control" id="minipoint" name="minipoint" placeholder="Punkty" value="<?= $article->getMinipoint() ?>">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="conference" class="col-sm-2 col-form-label">Konferencja</label>
                 <div class="col-sm-10">
-                    <input type="text" step="1" class="form-control" id="conference" name="conference" placeholder="Konferencja" value="<?= $article->getConference() ?>">
+                    <label class="form-check-label col-sm-2 col-form-label" for="conference">Konferencja</label>
+                    <input class="form-check-input" type="radio" name="conftype" value="conference" id="conference" <?= $article->getConferenceType() === "conference" ? "checked" : "" ?>>
+                </div>
+                <div class="col-sm-10">
+                    <label class="form-check-label col-sm-2 col-form-label" for="magazine">Czasopismo</label>
+                    <input class="form-check-input" type="radio" name="conftype" value="magazine" id="magazine" <?= $article->getConferenceType() === "magazine" ? "checked" : "" ?>>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input type="text" step="1" class="form-control" id="confvalue" name="confvalue" value="<?= $article->getConferenceValue() ?>">
                 </div>
             </div>
             <div class="form-group row">
