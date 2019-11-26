@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 16 Lis 2019, 23:02
+-- Czas generowania: 26 Lis 2019, 00:25
 -- Wersja serwera: 10.4.8-MariaDB
 -- Wersja PHP: 7.3.11
 
@@ -31,37 +31,21 @@ SET time_zone = "+00:00";
 CREATE TABLE `article` (
   `id_article` int(11) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8_polish_ci NOT NULL,
-  `doi` int(11) NOT NULL,
+  `doi` text COLLATE utf8_polish_ci NOT NULL,
   `minipoint` int(11) DEFAULT NULL,
-  `conference` varchar(80) COLLATE utf8_polish_ci DEFAULT NULL,
+  `conftype` varchar(80) COLLATE utf8_polish_ci DEFAULT NULL,
+  `confvalue` text COLLATE utf8_polish_ci NOT NULL,
   `publicdate` date DEFAULT NULL,
-  `author` int(11) NOT NULL
+  `shares` text COLLATE utf8_polish_ci NOT NULL,
+  `author` text COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `article`
 --
 
-INSERT INTO `article` (`id_article`, `title`, `doi`, `minipoint`, `conference`, `publicdate`, `author`) VALUES
-(8, 'Maciuś wielki', 0, 2, 'asd', '2019-11-04', 2),
-(9, 'asd', 0, 2, 'asd', '2019-11-04', 0),
-(10, 'asd', 0, 2, 'asd', '2019-11-04', 0),
-(11, 'asd', 0, 2, 'asd', '2019-11-04', 0),
-(12, 'maciek', 2, 2, '4devs', '2019-11-14', 2);
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `authors`
---
-
-CREATE TABLE `authors` (
-  `id_authors` int(11) UNSIGNED NOT NULL,
-  `name` int(11) NOT NULL,
-  `surname` int(11) NOT NULL,
-  `participation` varchar(10) NOT NULL,
-  `numberofarticles` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `article` (`id_article`, `title`, `doi`, `minipoint`, `conftype`, `confvalue`, `publicdate`, `shares`, `author`) VALUES
+(90, 'asd', 'asd', 2, 'conference', 'asd', '2019-11-11', 'asd22 50, asd 50', 'asd22, asd');
 
 -- --------------------------------------------------------
 
@@ -73,10 +57,18 @@ CREATE TABLE `users` (
   `id_user` int(11) UNSIGNED NOT NULL,
   `email` varchar(50) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `surname` varchar(50) NOT NULL,
-  `password` varchar(20) DEFAULT NULL,
-  `affilation` varchar(50) NOT NULL
+  `password` text NOT NULL,
+  `affiliation` varchar(50) NOT NULL,
+  `role` text NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `users`
+--
+
+INSERT INTO `users` (`id_user`, `email`, `name`, `password`, `affiliation`, `role`) VALUES
+(1, 'asd@asd.pl', 'asd22', '7815696ecbf1c96e6894b779456d330e', 'alibaba', 'user'),
+(5, 'asd@asd.asd', 'asd', '7815696ecbf1c96e6894b779456d330e', 'asdasd', 'admin');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -89,16 +81,11 @@ ALTER TABLE `article`
   ADD PRIMARY KEY (`id_article`);
 
 --
--- Indeksy dla tabeli `authors`
---
-ALTER TABLE `authors`
-  ADD PRIMARY KEY (`id_authors`);
-
---
 -- Indeksy dla tabeli `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -108,19 +95,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT dla tabeli `article`
 --
 ALTER TABLE `article`
-  MODIFY `id_article` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT dla tabeli `authors`
---
-ALTER TABLE `authors`
-  MODIFY `id_authors` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_article` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
